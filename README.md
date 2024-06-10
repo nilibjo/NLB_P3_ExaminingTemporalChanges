@@ -15,3 +15,7 @@ See the file "version_log.txt" for the relevant verions of python packages which
 5. In the analysis folder, run all files "Annotate_..."-.py, to structure the parameter estimates and relevant data in a common table. 
 
 6. Now analysis can be performed within the "Analysis folder" by running the relevant python-scripts.
+
+## Models
+
+The cardiovacular models as referenced in the tex are available through the Models folder, and must be added locally to the other subfolders wherever needed, or referenced correctly.
