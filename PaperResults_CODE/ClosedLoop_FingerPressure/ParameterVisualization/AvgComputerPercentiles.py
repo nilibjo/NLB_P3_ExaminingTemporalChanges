@@ -4,7 +4,7 @@ import numpy as np
 import os
     
 ################## READ FILES
-filepath = "../../Data/PaperData_Cleaned_ReID.xlsx"
+filepath = "../../Data/PaperData_ReID.xlsx"
 data_table = pd.read_excel(filepath, engine='openpyxl')
 
 compiled_participants = []
