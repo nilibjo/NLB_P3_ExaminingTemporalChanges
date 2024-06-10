@@ -4,7 +4,7 @@ import numpy as np
 import os
     
 ################## READ FILES
-filepath = "../../Data/PaperData_Cleaned_ReID.xlsx"
+filepath = "../../Data/PaperData_ReID.xlsx"
 data_table = pd.read_excel(filepath, engine='openpyxl')
 
 compiled_participants = []
@@ -13,7 +13,7 @@ compiled_participants = []
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     if patient_id in compiled_participants or (test_day == 'Pre-test day 3'):
@@ -94,7 +94,7 @@ for idx, row in data_table.iterrows():
         suffix = 'daymissing'
     
     # Write collected data to outputfile
-    DataNew.to_csv('MultiFitsRaw_'+patient_id+'_'+suffix+'_'+str(int(trial_id))+'.csv', index=False, sep=',')
+    DataNew.to_csv('MultiFitsRaw_'+patient_id+'_'+suffix+'_'+str(trial_id)+'.csv', index=False, sep=',')
     
     # Compute variance of estimates
     count = -1
