@@ -6,8 +6,6 @@ import scipy_vewk3_MVP as models
 
 closed_loop_base_pars = dict()
 
-closed_loop_base_pars_short = dict()
-
 def shift_minimum(p,q,t):
     # Identify minimum
     min_ind = np.argmin(p)
@@ -27,8 +25,8 @@ def shift_minimum(p,q,t):
     return p, q, t+t_base
 
 ################## READ FILES
-filepath = "../Data/PaperData_Cleaned_ReID.xlsx"
-data_table = pd.read_excel(finometer_paths, engine='openpyxl')
+filepath = "../Data/PaperData_ReID.xlsx"
+data_table = pd.read_excel(filepath, engine='openpyxl')
     
 kolonner = ["id", "Partid", "test_day","E_max","E_min","C_ao","R_sys","V_tot","Z_ao","C_sv","R_mv","t_peak","stddevsq"]
 out_kolonner = ["id", "Partid", "test_day", "SV", "SV_int", "Q_lvao_max", "V_dia", "V_sys", "P_sys", "P_dia", "P_sys_REAL", "P_dia_REAL", "P_sv_sys", "P_sv_dia", "MVP"]
@@ -61,7 +59,7 @@ Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)
@@ -145,16 +143,16 @@ for idx, row in data_table.iterrows():
             
 
             ES_V_raw = float(wt_frame['LVESV(4D)'].iloc[0])
-            if ES_V == "#VALUE!":
+            if ES_V_raw == "#VALUE!":
                 ES_V_raw = np.nan
-            elif (ES_V_raw is None) or np.isnan(E_SV_raw):
+            elif (ES_V_raw is None) or np.isnan(ES_V_raw):
                 ES_V_raw = np.nan
             
             
             print(partid, pid, test_day_file)
             
             chosenfilename = filename
-            Data = pd.read_csv('../ClosedLoop_FingerPressure/ParameterVisualization/'+filename,header=0,delimiter=',')            
+            Data = pd.read_csv('../ClosedLoop_CarotidPressure/ParameterVisualization/'+filename,header=0,delimiter=',')            
                    
             key_filt = Data['stddevsq'] <= Data['stddevsq'].mean() 
             temp_frame = Data.loc[key_filt]

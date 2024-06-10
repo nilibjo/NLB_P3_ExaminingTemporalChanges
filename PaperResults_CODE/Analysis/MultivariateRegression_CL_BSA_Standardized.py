@@ -37,8 +37,8 @@ df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre']
 df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid']
 df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post']
 
-VO2_pre = VO2table[VO2table['test_day'] == 'Pre']
-VO2_post = VO2table[VO2table['test_day'] == 'Post'] 
+VO2_pre = VO2table[VO2table['test_day'] == 1]
+VO2_post = VO2table[VO2table['test_day'] == 3] 
 
 # Identify participants measured at each measurement day for carotid pressure
 partid_pre = df_meas_tono_pre['partid']
@@ -196,11 +196,11 @@ for elt in common_ids_tono:
     
     try:
         new_elt = elt
-        age = float(VO2Table[VO2Table['Partid'] == new_elt]['Age'].iloc[0])
+        age = float(VO2table[VO2table['Partid'] == new_elt]['Age'].iloc[0])
         
     except:
         age = np.nan
-
+    
     try:
         new_elt = elt
         sex = VO2table[VO2table['Partid'] == new_elt]['Sex'].iloc[0]
@@ -209,7 +209,7 @@ for elt in common_ids_tono:
         sex = 'Unknown'
     
     height_tab = VO2table[VO2table['Partid'] == elt]
-    height = height_tab[height_tab['Partid'] == 1]['height'].iloc[0]    
+    height = height_tab[height_tab['test_day'] == 1]['height'].iloc[0]    
     
     
     wt0 = height_tab[height_tab['test_day'] == 1]['weight'].iloc[0]
@@ -442,7 +442,7 @@ df_reg_longform2["Day"] = np.append( ["Day1"]*len(df_reg["id"]), ["Day2"]*len(df
 
 # Standardize regressors
 
-df_reg_longform3_std = df_reg_longform3[["Age", "BMI", "PAI_PP", "SV", "VO2", "Week"]].select_dtypes(include=[np.number]).apply(stats.zscore,nan_policy='omit')
+df_reg_longform3_std = df_reg_longform3[["Age", "BMI", "SV", "VO2", "Week"]].select_dtypes(include=[np.number]).apply(stats.zscore,nan_policy='omit')
 df_reg_longform3_std["Sex"] = df_reg_longform3["Sex"]
 df_reg_longform3_std["id"] = df_reg_longform3["id"]
 df_reg_longform3_std["Emax"] = df_reg_longform3["Emax"]
@@ -460,7 +460,7 @@ df_reg_longform3_std["Epers"] = df_reg_longform3["Epers"]
 #################################################
 #################################################
 # REGRESSION
-
+#print(df_reg_longform3_std[["Rsys", "Age", "Sex", "BMI"]].head(2))
 
 model = smf.mixedlm(formula = "Rsys ~ Age + C(Sex) + BMI", data=df_reg_longform3_std, groups=df_reg_longform3_std["id"]).fit()
 print_model = model.summary()

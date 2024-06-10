@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import pingouin as pgn
-
+import seaborn as sb
 
 # Load Carotid Data
 
@@ -30,21 +30,21 @@ print("Search complete")
 
 # Split Dataset by measurement day
 
-df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre-test day 2']
-df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid-test']
-df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post-test day 2']
+df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre']
+df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid']
+df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post']
 
-df_meas_fp_pre = df_meas_FP[df_meas_FP['test_day'] == 'Pre-test day 2']
-df_meas_fp_mid = df_meas_FP[df_meas_FP['test_day'] == 'Mid-test']
-df_meas_fp_post = df_meas_FP[df_meas_FP['test_day'] == 'Post-test day 2']
+df_meas_fp_pre = df_meas_FP[df_meas_FP['test_day'] == 'Pre']
+df_meas_fp_mid = df_meas_FP[df_meas_FP['test_day'] == 'Mid']
+df_meas_fp_post = df_meas_FP[df_meas_FP['test_day'] == 'Post']
 
-df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre-test day 2']
-df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid-test']
-df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post-test day 2']
+df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre']
+df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid']
+df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post']
 
-df_mod_fp_pre = df_mod_FP[df_mod_FP['test_day'] == 'Pre-test day 2']
-df_mod_fp_mid = df_mod_FP[df_mod_FP['test_day'] == 'Mid-test']
-df_mod_fp_post = df_mod_FP[df_mod_FP['test_day'] == 'Post-test day 2']
+df_mod_fp_pre = df_mod_FP[df_mod_FP['test_day'] == 'Pre']
+df_mod_fp_mid = df_mod_FP[df_mod_FP['test_day'] == 'Mid']
+df_mod_fp_post = df_mod_FP[df_mod_FP['test_day'] == 'Post']
 
 # Identify participants measured at each measurement day for carotid pressure
 partid_pre = df_meas_tono_pre['partid']
@@ -287,21 +287,21 @@ m612_Emax_D = pgn.corr(df_meas_changes_fp["E_max_612wk"], df_mod_changes_fp["E_m
 
 # Compute changes in the same manner as for the open loop model
 
-df_meas_tono_pre_open = df_meas_tono[df_meas_tono['test_day'] == 'Pre-test day 2']
-df_meas_tono_mid_open = df_meas_tono[df_meas_tono['test_day'] == 'Mid-test']
-df_meas_tono_post_open = df_meas_tono[df_meas_tono['test_day'] == 'Post-test day 2']
+df_meas_tono_pre_open = df_meas_tono[df_meas_tono['test_day'] == 'Pre']
+df_meas_tono_mid_open = df_meas_tono[df_meas_tono['test_day'] == 'Mid']
+df_meas_tono_post_open = df_meas_tono[df_meas_tono['test_day'] == 'Post']
 
-df_meas_fp_pre_open = df_meas_FP[df_meas_FP['test_day'] == 'Pre-test day 2']
-df_meas_fp_mid_open = df_meas_FP[df_meas_FP['test_day'] == 'Mid-test']
-df_meas_fp_post_open = df_meas_FP[df_meas_FP['test_day'] == 'Post-test day 2']
+df_meas_fp_pre_open = df_meas_FP[df_meas_FP['test_day'] == 'Pre']
+df_meas_fp_mid_open = df_meas_FP[df_meas_FP['test_day'] == 'Mid']
+df_meas_fp_post_open = df_meas_FP[df_meas_FP['test_day'] == 'Post']
 
-df_mod_tono_pre_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Pre-test day 2']
-df_mod_tono_mid_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Mid-test']
-df_mod_tono_post_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Post-test day 2']
+df_mod_tono_pre_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Pre']
+df_mod_tono_mid_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Mid']
+df_mod_tono_post_open = df_mod_tono_open[df_mod_tono_open['test_day'] == 'Post']
 
-df_mod_fp_pre_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Pre-test day 2']
-df_mod_fp_mid_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Mid-test']
-df_mod_fp_post_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Post-test day 2']
+df_mod_fp_pre_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Pre']
+df_mod_fp_mid_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Mid']
+df_mod_fp_post_open = df_mod_FP_open[df_mod_FP_open['test_day'] == 'Post']
 
 partid_pre_open = df_meas_tono_pre_open['partid']
 partid_mid_open = df_meas_tono_mid_open['partid']

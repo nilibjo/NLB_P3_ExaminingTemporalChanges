@@ -7,12 +7,8 @@ import scipy_vewk3_MVP as models
 
 closed_loop_base_pars = dict()
 
-closed_loop_base_pars_short = dict()
-
 def shift_minimum(p,q,t):
-    #plt.plot(t,p,label='Old p')
-    #plt.plot(t,q,label='New q')
-    #plt.show()
+    # Identify minimum
     min_ind = np.argmin(p)
     t_base = t[0]
     t=t-t[0]
@@ -33,8 +29,8 @@ def shift_minimum(p,q,t):
         return p, q, t+t_base
 
 ################## READ FILES
-filepath = "../postCPET/Data/PaperData_CPET_Compact.xlsx"
-finometer_index = pd.read_excel(filepath, engine='openpyxl')
+filepath = "../PostCPET/Data/PaperData_CPET_Compact.xlsx"
+data_table = pd.read_excel(filepath, engine='openpyxl')
     
 kolonner = ["id", "Partid", "test_day","E_max","E_min","C_ao","R_sys","V_tot","Z_ao","C_sv","R_mv","t_peak","stddevsq"]
 out_kolonner = ["id", "Partid", "test_day", "SV", "SV_int", "Q_lvao_max", "V_dia", "V_sys", "P_sys", "P_dia", "P_sys_REAL", "P_dia_REAL", "P_sv_sys", "P_sv_dia", "MVP"]
@@ -42,7 +38,7 @@ out_kolonner = ["id", "Partid", "test_day", "SV", "SV_int", "Q_lvao_max", "V_dia
 compiled_participants = []
 
 try:
-    Zfile = '../../ParamEst_V22_June/Parameter7Estimations/ScaledFinger_CPET_Realigned_Nocutoff_Noskip/ParameterVisualization/ZaoFits.csv
+    Zfile = '../PostCPET/ClosedLoop_FingerPressure/ParameterVisualization/ZaoFits.csv'
     Zdata = pd.read_csv(Zfile, names=['Number', 'ID', 'partid', 'test_day', 'zval', 'eval', 'vval'], sep=',')
 except Exception as exc:
     print(exc)
@@ -59,7 +55,7 @@ Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)
@@ -71,7 +67,7 @@ for idx, row in data_table.iterrows():
     
     compiled_participants.append(patient_id)
     
-    for filename in os.listdir('../../ParamEst_V22_June/Parameter7Estimations/ScaledFinger_CPET_Realigned_Nocutoff_Noskip/ParameterVisualization/'):
+    for filename in os.listdir('../PostCPET/ClosedLoop_FingerPressure/ParameterVisualization/'):
         
         if "MultiFitsRaw_" in filename and '_'+str(patient_id) in filename: 
             
@@ -82,14 +78,12 @@ for idx, row in data_table.iterrows():
             ### READ BSA DATA
             id_match = data_table['Partid'] == trial_id
             if ('pre' in filename) or ('pr3' in filename):
-                day_match = data_table['test_day'] == 1
+                day_match = data_table['test_day'] == '1CPET'
             elif ('post' in filename) or ('po3' in filename):
-                day_match = data_table['test_day'] == 3
-            elif 'mid' in filename:
-                day_match = data_table['test_day'] == 2
+                day_match = data_table['test_day'] == '3CPET'
             
             line_id = id_match & day_match
-            wt_frame = BsaData.loc[line_id]
+            wt_frame = data_table.loc[line_id]
             weight = float(wt_frame['weight'].iloc[0])
             height = float(row["height"])
             # Compute BSA
@@ -143,16 +137,16 @@ for idx, row in data_table.iterrows():
             
             
             ES_V_raw = float(wt_frame['LVESV(4D)'].iloc[0])
-            if ES_V == "#VALUE!":
+            if ES_V_raw == "#VALUE!":
                 ES_V_raw = np.nan
-            elif (ES_V_raw is None) or np.isnan(E_SV_raw):
+            elif (ES_V_raw is None) or np.isnan(ES_V_raw):
                 ES_V_raw = np.nan
             
-            print(partid, paistr+'_'+paiid, test_day_file)
+            print(partid, pid, test_day_file)
             
             chosenfilename = filename
             skipflag = False
-            Data = pd.read_csv('../../ParamEst_V22_June/Parameter7Estimations/ScaledFinger_CPET_Realigned_Nocutoff_Noskip/ParameterVisualization/'+filename,header=0,delimiter=',')            
+            Data = pd.read_csv('../PostCPET/ClosedLoop_FingerPressure/ParameterVisualization/'+filename,header=0,delimiter=',')            
                    
             key_filt = Data['stddevsq'] <= Data['stddevsq'].mean() 
             temp_frame = Data.loc[key_filt]
@@ -177,7 +171,7 @@ for idx, row in data_table.iterrows():
                 vewk3.set_pars(**par_dict)
                 ret_dict, t_eval,_ = models.solve_to_steady_state(vewk3, n_cycles=10)
 
-                model_out_list = [paistr+'_'+paiid, partid[:-4], tday,
+                model_out_list = [pid, partid[:-4], tday,
                                   ret_dict["P_sys"], ret_dict["P_dia"], ret_dict["SV"]/bsa,  
                                   ret_dict['MVP'], par_dict['R_sys']/bsa, par_dict['E_max']/bsa, 
                                   par_dict['C_ao']/bsa,par_dict['C_sv']/bsa,
@@ -190,7 +184,7 @@ for idx, row in data_table.iterrows():
                 emax_est = np.max(p_r)/(ES_V_raw*bsa)
                 emax_90perc_est = 0.9*np.max(p_r)/(ES_V_raw*bsa)
                 
-                meas_out_list = [paistr+'_'+paiid, partid, tday, 
+                meas_out_list = [pid, partid[:-4], tday, 
                                  np.max(p_r), np.min(p_r), SV_raw/bsa, 
                                  rsys_est, emax_est, emax_90perc_est, cao_est, 
                                  len(p_r), T_r]

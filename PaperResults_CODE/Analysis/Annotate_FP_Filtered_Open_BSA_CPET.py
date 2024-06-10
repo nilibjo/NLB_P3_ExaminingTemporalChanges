@@ -32,13 +32,13 @@ def shift_minimum(p,q,t):
         return p, q, t+t_base
 
 ################## READ FILES
-filepath = "../postCPET/Data/PaperData_CPET_Compact.xlsx"
-finometer_index = pd.read_excel(filepath, engine='openpyxl')
+filepath = "../PostCPET/Data/PaperData_CPET_Compact.xlsx"
+data_table = pd.read_excel(filepath, engine='openpyxl')
 
 compiled_participants = []
 
 try:
-    Zfile = '../../ParamEst_V22_June/OpenLoopEstimations/ScaledFinger_FixedLimit_PsvFix_CPET/ParameterVisualization/ZaoFits.csv'
+    Zfile = '../PostCPET/OpenLoop_FingerPressure/ParameterVisualization/ZaoFits.csv'
     Zdata = pd.read_csv(Zfile, names=['Number', 'ID', 'partid', 'test_day', 'zval', 'eval', 'vval'], sep=',')
 except Exception as exc:
     print(exc)
@@ -47,14 +47,14 @@ except Exception as exc:
 
 mod_kol = ['id','partid','test_day',
            'P_sys', 'P_dia', 'SV', 
-           'R_sys', 'E_max', 'E_min', 'C_ao', 'Z_ao' 't_peak', 
+           'R_sys', 'E_max', 'E_min', 'C_ao', 'Z_ao', 't_peak', 
            'T']
 Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)
@@ -66,7 +66,7 @@ for idx, row in data_table.iterrows():
     
     compiled_participants.append(patient_id)
     
-    for filename in os.listdir('../OpenLoop_FingerPressure/ParameterVisualization/'):
+    for filename in os.listdir('../PostCPET/OpenLoop_FingerPressure/ParameterVisualization/'):
         
         if "MultiFitsRaw_" in filename and '_'+str(patient_id) in filename: 
             
@@ -77,11 +77,9 @@ for idx, row in data_table.iterrows():
             ### READ BSA DATA
             id_match = data_table['Partid'] == trial_id
             if ('pre' in filename) or ('pr3' in filename):
-                day_match = data_table['test_day'] == 1
+                day_match = data_table['test_day'] == '1CPET'
             elif ('post' in filename) or ('po3' in filename):
-                day_match = data_table['test_day'] == 3
-            elif 'mid' in filename:
-                day_match = data_table['test_day'] == 2
+                day_match = data_table['test_day'] == '3CPET'
             
             line_id = id_match & day_match
             wt_frame = data_table.loc[line_id]
@@ -130,11 +128,11 @@ for idx, row in data_table.iterrows():
             closed_loop_base_pars["T"] = T_r
             
             
-            print(partid, paistr+'_'+paiid, test_day_file)
+            print(partid, pid, test_day_file)
             
             chosenfilename = filename
             skipflag = False
-            Data = pd.read_csv('../OpenLoopEstimations/ScaledFinger_FixedLimit_PsvFix_CPET_Realigned_Nocutoff_Noskip/ParameterVisualization/'+filename,header=0,delimiter=',')            
+            Data = pd.read_csv('../PostCPET/OpenLoop_FingerPressure/ParameterVisualization/'+filename,header=0,delimiter=',')            
                    
             key_filt = Data['stddevsq'] <= Data['stddevsq'].mean() 
             temp_frame = Data.loc[key_filt]
@@ -146,8 +144,8 @@ for idx, row in data_table.iterrows():
             if test_day_file == 'pre': tday = 'Pre'
             if test_day_file == 'mid': tday = 'Mid'
             if test_day_file == 'post': tday = 'Post'
-            if test_day_file == 'pr3': tday = 'CPET1'
-            if test_day_file == 'po3': tday = 'CPET3'
+            if test_day_file == 'pr3': tday = '1CPET'
+            if test_day_file == 'po3': tday = '3CPET'
             
             if (len(list(Data['E_max'])) != 0) and not (np.isnan(Data_mean.mean()).any()): 
                 par_dict = Data_mean.mean().to_dict()

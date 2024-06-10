@@ -49,7 +49,7 @@ Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)

@@ -4,9 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from scipy import stats
+import pingouin as pgn
 import statsmodels.formula.api as smf
 import statsmodels.api as sm
-
+import seaborn as sb
 
 # Load Carotid Pressure Data
 
@@ -30,16 +31,16 @@ print("Search for invalid E_max values complete")
 
 # Split dataset by measurement day
 
-df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre-test day 2']
-df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid-test']
-df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post-test day 2']
+df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre']
+df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid']
+df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post']
 
-df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre-test day 2']
-df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid-test']
-df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post-test day 2']
+df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre']
+df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid']
+df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post']
 
-VO2_pre = VO2table[VO2table['test_day'] == 'Pre-test day 2']
-VO2_post = VO2table[VO2table['test_day'] == 'Post-test day 2'] 
+VO2_pre = VO2table[VO2table['test_day'] == 1]
+VO2_post = VO2table[VO2table['test_day'] == 3] 
 
 # Identify participants measured at each measurement day for carotid pressure
 partid_pre = df_meas_tono_pre['partid']
@@ -197,7 +198,7 @@ for elt in common_ids_tono:
     
     try:
         new_elt = elt
-        age = float(VO2Table[VO2Table['Partid'] == new_elt]['Age'].iloc[0])
+        age = float(VO2table[VO2table['Partid'] == new_elt]['Age'].iloc[0])
         
     except:
         age = np.nan
@@ -210,7 +211,7 @@ for elt in common_ids_tono:
         sex = 'Unknown'
     
     height_tab = VO2table[VO2table['Partid'] == elt]
-    height = height_tab[height_tab['Partid'] == 1]['height'].iloc[0]    
+    height = height_tab[height_tab['test_day'] == 1]['height'].iloc[0]    
     
     
     wt0 = height_tab[height_tab['test_day'] == 1]['weight'].iloc[0]
@@ -600,8 +601,8 @@ fig = print_lined_scatterplots(df_reg_longform3[["id", "Day", "Rsys", "Cao",
                                special_ids=df_VO2_filt["id"], 
                                special_id_vars=["Rsys", "Cao", "Emax","BMI","SV","VO2"])
 
-fig.savefig('Pairplot_RegVars_CL_BSA_NoAge.svg')
-fig.savefig('Pairplot_RegVars_CL_BSA_NoAge.pdf')
+fig.savefig('Pairplots/Pairplot_RegVars_CL_BSA_NoAge.svg')
+fig.savefig('Pairplots/Pairplot_RegVars_CL_BSA_NoAge.pdf')
 
 
 # Create longform table without measurement day 2 data
@@ -633,11 +634,4 @@ df_reg_longform3_std["id"] = df_reg_longform3["id"]
 df_reg_longform3_std["Emax"] = df_reg_longform3["Emax"]
 df_reg_longform3_std["Rsys"] = df_reg_longform3["Rsys"]
 df_reg_longform3_std["Cao"] = df_reg_longform3["Cao"]
-
-df_reg_longform3_std["Rpers"] = df_reg_longform3["Rpop"]
-df_reg_longform3_std["Cpers"] = df_reg_longform3["Cpop"]
-df_reg_longform3_std["Epers"] = df_reg_longform3["Epop"]
-df_reg_longform3_std["Rpers"] = df_reg_longform3["Rpers"]
-df_reg_longform3_std["Cpers"] = df_reg_longform3["Cpers"]
-df_reg_longform3_std["Epers"] = df_reg_longform3["Epers"]
 

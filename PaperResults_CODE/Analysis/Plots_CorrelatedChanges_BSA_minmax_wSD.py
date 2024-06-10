@@ -25,21 +25,21 @@ print("Search complete")
 
 # Split Dataset by measurement day
 
-df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre-test day 2']
-df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid-test']
-df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post-test day 2']
+df_meas_tono_pre = df_meas_tono[df_meas_tono['test_day'] == 'Pre']
+df_meas_tono_mid = df_meas_tono[df_meas_tono['test_day'] == 'Mid']
+df_meas_tono_post = df_meas_tono[df_meas_tono['test_day'] == 'Post']
 
-df_meas_fp_pre = df_meas_FP[df_meas_FP['test_day'] == 'Pre-test day 2']
-df_meas_fp_mid = df_meas_FP[df_meas_FP['test_day'] == 'Mid-test']
-df_meas_fp_post = df_meas_FP[df_meas_FP['test_day'] == 'Post-test day 2']
+df_meas_fp_pre = df_meas_FP[df_meas_FP['test_day'] == 'Pre']
+df_meas_fp_mid = df_meas_FP[df_meas_FP['test_day'] == 'Mid']
+df_meas_fp_post = df_meas_FP[df_meas_FP['test_day'] == 'Post']
 
-df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre-test day 2']
-df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid-test']
-df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post-test day 2']
+df_mod_tono_pre = df_mod_tono[df_mod_tono['test_day'] == 'Pre']
+df_mod_tono_mid = df_mod_tono[df_mod_tono['test_day'] == 'Mid']
+df_mod_tono_post = df_mod_tono[df_mod_tono['test_day'] == 'Post']
 
-df_mod_fp_pre = df_mod_FP[df_mod_FP['test_day'] == 'Pre-test day 2']
-df_mod_fp_mid = df_mod_FP[df_mod_FP['test_day'] == 'Mid-test']
-df_mod_fp_post = df_mod_FP[df_mod_FP['test_day'] == 'Post-test day 2']
+df_mod_fp_pre = df_mod_FP[df_mod_FP['test_day'] == 'Pre']
+df_mod_fp_mid = df_mod_FP[df_mod_FP['test_day'] == 'Mid']
+df_mod_fp_post = df_mod_FP[df_mod_FP['test_day'] == 'Post']
 
 # Identify participants measured at each measurement day for carotid pressure
 partid_pre = df_meas_tono_pre['partid']

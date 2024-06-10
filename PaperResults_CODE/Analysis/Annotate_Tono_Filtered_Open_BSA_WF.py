@@ -3,12 +3,8 @@ import numpy as np
 import os
 
 import scipy_vewk3_openloop as models
-import scipy_wk3 as minmodel
-import scipy.optimize as opt
 
 closed_loop_base_pars = dict()
-
-closed_loop_base_pars_short = dict()
 
 def shift_minimum(p,q,t):
     # Identify minimum
@@ -30,7 +26,7 @@ def shift_minimum(p,q,t):
 
 ################## READ FILES
 filepath = "../Data/PaperData_ReID.xlsx"
-data_table = pd.read_excel(finometer_paths, engine='openpyxl')
+data_table = pd.read_excel(filepath, engine='openpyxl')
 
 compiled_participants = []
 
@@ -48,7 +44,7 @@ Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)

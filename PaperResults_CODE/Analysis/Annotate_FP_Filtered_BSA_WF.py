@@ -54,7 +54,7 @@ Dataframe_modelestimates = pd.DataFrame(columns=mod_kol)
 for idx, row in data_table.iterrows():
     
     trial_id = row['Partid']
-    patient_id = row['ID']
+    patient_id = row['id']
     test_day = row['test_day']
     
     print(trial_id)
@@ -84,7 +84,7 @@ for idx, row in data_table.iterrows():
                 day_match = data_table['test_day'] == 2
             
             line_id = id_match & day_match
-            wt_frame = BsaData.loc[line_id]
+            wt_frame = data_table.loc[line_id]
             weight = float(wt_frame['weight'].iloc[0])
             height = float(row["height"])
             # Compute BSA
@@ -125,7 +125,26 @@ for idx, row in data_table.iterrows():
             q_r = q.copy()
             
             print("Data loaded")
+            #if len(str(t_r[-1])) == 5 and str(t_r[-1])[-1] == '5':
+            #    if int(str(t_r[-1])[-2]) % 2 == 0:
+            #        T_r = np.round(t_r[-1],2) + 0.01
+            #        T_r = np.round(T_r,2)
+            #    else:
+            #        T_r = np.round(t_r[-1],2) - 0.01
+            #        T_r = np.round(T_r,2)
+            #else:
+            #if len(str(t_r[-1])) == 5 and str(t_r[-1])[-1] == '5':
+            #    if (int(str(t_r[-1])[-2]) % 2 == 0) or (int(str(t_r[-1])[-2]) % 9 == 0):
+            #        T_r = np.round(t_r[-1] + 0.004,2)
+            #        T_r = np.round(T_r,2)
+            #    else: 
+            #        T_r = np.round(t_r[-1] - 0.006,2)
+            #        T_r = np.round(T_r,2)
+            #else:
+            #    T_r = np.round(t_r[-1],2)
+            #print(t[-1], np.round(t_r[-1],2))
             T_r = np.round(t_r[-1],2)
+            #print(T_r)
             closed_loop_base_pars["T"] = T_r
             
             
@@ -138,9 +157,9 @@ for idx, row in data_table.iterrows():
             
             
             ES_V_raw = float(wt_frame['LVESV(4D)'].iloc[0])
-            if ES_V == "#VALUE!":
+            if ES_V_raw == "#VALUE!":
                 ES_V_raw = np.nan
-            elif (ES_V_raw is None) or np.isnan(E_SV_raw):
+            elif (ES_V_raw is None) or np.isnan(ES_V_raw):
                 ES_V_raw = np.nan
             
             
